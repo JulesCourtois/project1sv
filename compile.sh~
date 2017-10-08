@@ -1,0 +1,3 @@
+FLAGS = -std=c++11
+
+g++ $FLAGS Neuron.h Neuron.cpp main.cpp -o out

@@ -2,19 +2,29 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
+#include <map>
 
 // Include our complex numbers class
 #include "Neuron.h"
 
-double TIME_STEP = 0.1; // In ms
+const double TIME_STEP = 0.1; // In ms
+const double D = 1.0; // Delay #TODO: find real value
+const double J = 1.0; // Spike force, #TODO: find real value
 
 int main(int argc, char* argv[])
 {
 	// Good practice to use with small scope
 	using namespace std;
 
-	// Init neurons
+	// Initialize neurons
 	Neuron neuron1 = Neuron(TIME_STEP);
+	Neuron neuron2 = Neuron(TIME_STEP);
+
+	// Initialize connections
+	map<Neuron, vector<Neuron>> connections = InitConnections(neurons);
+	connections[neuron1] = {neuron2};
+	connections[neuron2] = {neuron1};
 
 	// Options
 	double ext_I = 10.0;
@@ -42,11 +52,22 @@ int main(int argc, char* argv[])
 			current_I = 0.0;
 		}
 
-		cout << neuron1.GetMembranePotential() << "\n";
+		// Iterate over all neurons to update
+		for (vector<Neuron>::iterator neuron = neurons.begin() ; neuron != neurons.end(); ++neuron) {
+			// Update neuron, pass sim_time and current
+			bool spiked = *neuron.Update(sim_time, current_I);
+			cout << *neuron.GetMembranePotential() << "\n";
 
-		// Update neurons, pass current time, delta and current
-		neuron1.Update(sim_time, TIME_STEP, current_I);
-		
+			if (spiked) {
+					// TODO: translate to real code
+					for (vector<Neuron>::iterator connected = connections[*neuron].begin() ; connected != connections[*neuron].end(); ++connected) {
+						connected.Receive(sim_time + D, J);
+					}
+			}
+		}
+
+
+
 		sim_time += TIME_STEP;
 	}
 
@@ -57,26 +78,6 @@ int main(int argc, char* argv[])
 		output_file << *i;
 	}
 	output_file.close();
-	
+
     return 0;
 }
-
-/** Compréhension
-
-N neurones dans le système,
-Ne neurones excitatoires
-Ni neurones inhibitoires
-
-Chaque neurones a C connexions,
-Ce connexions depuis des neurones Ne
-Ci connexions depuis des neurones Ni
-
-Chaque neurone a également Cext connexion extérieures de neurones excitatoires.
-epsilon = Ce/Ne = Ci/Ni
-
-timestep: 0.1 ms
-refractory period: 2 ms
-V_THRESHOLD = -55 mV
-conductivity = 250.0
-tau = 10
-**/

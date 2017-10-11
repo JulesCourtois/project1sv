@@ -9,7 +9,7 @@ private:
 	std::vector<double> spikes;
 	int spike_count;
 	double c1, c2, h;
-	double ring_buffer [RING_BUFFER_SIZE];
+	double ring_buffer [RING_BUFFER_SIZE] = {}; // Init to 0
 	int ring_ind = 0;
 
 public:

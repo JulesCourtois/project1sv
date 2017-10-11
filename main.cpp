@@ -9,8 +9,6 @@
 #include "Neuron.h"
 
 const double TIME_STEP = 0.1; // In ms
-const double D = 1.0; // Delay #TODO: find real value
-const double J = 1.0; // Spike force, #TODO: find real value
 
 int main(int argc, char* argv[])
 {
@@ -58,10 +56,10 @@ int main(int argc, char* argv[])
 			bool spiked = *neuron.Update(sim_time, current_I);
 			cout << *neuron.GetMembranePotential() << "\n";
 
+			// If neuron spiked, send spike to all connected neurons
 			if (spiked) {
-					// TODO: translate to real code
 					for (vector<Neuron>::iterator connected = connections[*neuron].begin() ; connected != connections[*neuron].end(); ++connected) {
-						connected.Receive(sim_time + D, J);
+						connected.ReceiveSpike();
 					}
 			}
 		}

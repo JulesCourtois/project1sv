@@ -45,15 +45,20 @@ bool Neuron::Update(double sim_time, double input_current) {
 		}
 
 		// Solve equation
-		membrane_potential = c1 * membrane_potential + input_current * c2; // TODO: Add "+J" part according to ring_buffer
+		membrane_potential = c1 * membrane_potential + input_current * c2 + J * ring_buffer[ring_ind];
+
+		// Update ring buffer
+		ring_buffer[ring_ind] = 0;
+		ring_ind = (ring_ind + 1) % RING_BUFFER_SIZE;
 	}
 
 	// Return true iff spike has occurred
 	return ret;
 }
 
-void Neuron::Receive(double time, double strength) {
-	// TODO: Implement ring buffer and receive method
+void Neuron::ReceiveSpike() {
+	int last_ind = (ring_ind - 1) % RING_BUFFER_SIZE;
+	ring_buffer[ring_ind - 1] += 1;
 }
 
 double Neuron::GetMembranePotential() {

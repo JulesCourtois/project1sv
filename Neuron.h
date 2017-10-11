@@ -9,6 +9,8 @@ private:
 	std::vector<double> spikes;
 	int spike_count;
 	double c1, c2, h;
+	double ring_buffer [RING_BUFFER_SIZE];
+	int ring_ind = 0;
 
 public:
 	const double V_THRESHOLD = 20.0; // mV
@@ -17,6 +19,7 @@ public:
 	const double V_RESET = 0.0; // mV or 10.0
 	const double C = 1.0; // Capacity
 	const double R = C * TAU; // Resistance = 20.0
+	const int RING_BUFFER_SIZE = 11; // (Time_step / delay) + 1
 
 	Neuron(double timestep);
 
@@ -25,7 +28,7 @@ public:
 	bool IsRefractory();
 	void HandleRefractoryPeriod();
 
-	void Receive(double time, double strength);
+	void ReceiveSpike(double strength);
 
 	void AddSpike(int sim_time);
 

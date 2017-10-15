@@ -64,18 +64,20 @@ int main(int argc, char* argv[])
 			}
 		}
 
-
-
 		sim_time += TIME_STEP;
 	}
 
 	// Once simulation is over, print to file
-	ofstream output_file("out.txt");
-	output_file << "Spikes occured at times:\n";
+	ofstream output1("out1.txt");
+	output1 << "Spikes in Neuron1 occured at times:\n";
 	for (vector<double>::const_iterator i = neuron1.GetSpikes().begin(); i != neuron1.GetSpikes().end(); ++i) {
-		output_file << *i;
+		output1 << *i;
 	}
-	output_file.close();
+	output1 << "\nSpikes in Neuron2 occured at times:\n";
+	for (vector<double>::const_iterator i = neuron2.GetSpikes().begin(); i != neuron2.GetSpikes().end(); ++i) {
+		output1 << *i;
+	}
+	output1.close();
 
     return 0;
 }

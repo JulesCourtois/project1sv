@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 	vector<Neuron> neurons = {neuron1, neuron2};
 
 	// Options
-	double ext_I = 5.0;
+	double ext_I = 6.0;
 	int a = 0;
 	int b = 100;
 
@@ -64,8 +64,8 @@ int main(int argc, char* argv[])
 
 			// If neuron spiked, send spike to all connected neurons
 			if (spiked) {
-					for (vector<Neuron>::iterator connected = neuron->GetConnections().begin() ; connected != neuron->GetConnections().end(); ++connected) {
-						connected->ReceiveSpike();
+					for (vector<Neuron>::size_type i = 0; i != neuron->GetConnections().size(); i++ ) {
+						neuron->GetConnections().at(i).ReceiveSpike();
 					}
 			}
 		}

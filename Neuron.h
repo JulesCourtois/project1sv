@@ -11,16 +11,17 @@ private:
 	static constexpr double C = 1.0; // Capacity
 	static constexpr double R = 20.0; // Gohm
 	static constexpr double J = 0.1; // mV
-	static constexpr int RING_BUFFER_SIZE = 16; // (Time_step / delay) + 1
+	static constexpr int DELAY = 15;
+	static constexpr int RING_BUFFER_SIZE = 16;
 	static constexpr double TIME_STEP = 0.1; // ms
 	
 	bool is_refractory, has_current;
 	double membrane_potential, refractory_time;
 	std::vector<double> spikes;
-	int spike_count;
+	int spike_count, local_clock = 0;
 	double c1, c2;
-	double ring_buffer [RING_BUFFER_SIZE] = {}; // Init to 0
-	int ring_ind = 0;
+	std::vector<int> ring_buffer; // 16 ints with value 0
+	int ring_ind;
 	std::vector<Neuron> connections;
 
 public:	

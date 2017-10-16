@@ -8,36 +8,37 @@
 // Include our complex numbers class
 #include "Neuron.h"
 
-const double TIME_STEP = 0.1; // In ms
 
 int main(int argc, char* argv[])
 {
 	// Good practice to use with small scope
 	using namespace std;
+	
+	static constexpr double TIME_STEP = 0.1; // ms
 
 	// Initialize neurons
-	Neuron neuron1 = Neuron(TIME_STEP);
-	Neuron neuron2 = Neuron(TIME_STEP);
+	vector<Neuron> n2conn = {};
+	Neuron neuron2 = Neuron(n2conn, false);
+	vector<Neuron> n1conn = {neuron2};
+	Neuron neuron1 = Neuron(n1conn, true);
 
 	// Initialize connections
-	map<Neuron, vector<Neuron>> connections = InitConnections(neurons);
-	connections[neuron1] = {neuron2};
-	connections[neuron2] = {neuron1};
+	vector<Neuron> neurons = {neuron1, neuron2};
 
 	// Options
-	double ext_I = 10.0;
-	double a = 0.0;
-	double b = 10.0;
+	double ext_I = 5.0;
+	int a = 0;
+	int b = 100;
 
 	// Equation variables
 	double current_I = 0.0;
 
-	// Set starting time to 0ms
-	double sim_time = 0.0;
+	// Set starting timestep to 0. Multiply by TIME_STEP to get actual time.
+	int sim_time = 0;
 
 	// First command-line argument is duration time in seconds
-	double stop_time;
-	sscanf(argv[1], "%lf", &stop_time);
+	int stop_time;
+	sscanf(argv[1], "%d", &stop_time);
 
 	// Loop while sim_time < stop_time
 	while (sim_time < stop_time) {
@@ -52,19 +53,24 @@ int main(int argc, char* argv[])
 
 		// Iterate over all neurons to update
 		for (vector<Neuron>::iterator neuron = neurons.begin() ; neuron != neurons.end(); ++neuron) {
-			// Update neuron, pass sim_time and current
-			bool spiked = *neuron.Update(sim_time, current_I);
-			cout << *neuron.GetMembranePotential() << "\n";
+
+			// Update neuron, pass sim_time and current. Only neuron1 has current input
+			if (!neuron->HasCurrent()) {
+				current_I = 0.0;
+			}
+	
+			bool spiked = neuron->Update(sim_time, current_I);
+			cout << neuron->GetMembranePotential() << "\n";
 
 			// If neuron spiked, send spike to all connected neurons
 			if (spiked) {
-					for (vector<Neuron>::iterator connected = connections[*neuron].begin() ; connected != connections[*neuron].end(); ++connected) {
-						connected.ReceiveSpike();
+					for (vector<Neuron>::iterator connected = neuron->GetConnections().begin() ; connected != neuron->GetConnections().end(); ++connected) {
+						connected->ReceiveSpike();
 					}
 			}
 		}
 
-		sim_time += TIME_STEP;
+		sim_time++;
 	}
 
 	// Once simulation is over, print to file

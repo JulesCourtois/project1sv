@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 		// Iterate over all neurons to update
 		for (vector<Neuron*>::size_type i = 0; i != neurons.size(); i++ ) {
 
-			Neuron* neuron = neurons.at(i);
+			Neuron neuron = neurons.at(i);
 
 			// Update neuron, pass sim_time and current. Only neuron1 has current input
 			if (!neuron->HasCurrent()) {

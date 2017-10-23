@@ -1,3 +1,0 @@
-Spikes in Neuron1 occured at times:
-09.6
-Spikes in Neuron2 occured at times:

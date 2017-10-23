@@ -3,26 +3,74 @@
 #include <fstream>
 #include <string>
 #include <vector>
-#include <map>
+#include <random>
 
 // Include our complex numbers class
 #include "Neuron.h"
 
+static constexpr int Ne = 10000; // Excitatory neurons
+static constexpr int Ni = 2500;  // Inhibitory neurons
+static constexpr int Ce = 1000;
+static constexpr int Ci = 250;
+static constexpr int Cext = 1000; // Exterior (excitatory) neurons
+static constexpr double Je = 0.5; // Exterior (excitatory) neurons
 
 int main(int argc, char* argv[])
 {
 	// Good practice to use with small scope
 	using namespace std;
-	
+
 	static constexpr double TIME_STEP = 0.1; // ms
 
+	static constexpr double TIME_STEP = 0.1; // ms
+
+	// Initialize network
+	vector<Neuron*> excitatory;
+	vector<Neuron*> inhibitory;
+	vector<Neuron*> neurons;
+
 	// Initialize neurons
-	Neuron neuron2 = Neuron(false);
-	Neuron neuron1 = Neuron(true);
+	for (int i = 0; i < Ne + Ni; ++i) {
+		Neuron neuron;
+		if (i < Ne) {
+			neuron = Neuron(false, true);
+			excitatory.push_back(neuron);
+		}
+		else {
+			neuron = Neuron(false, false);
+			inhibitory.push_back(neuron);
+		}
+	}
+
+	neurons = excitatory;
+	neurons.insert(neurons.end(), inhibitory.begin(), inhibitory.end());
+
+	// Initialize connexions
+	for (vector<Neuron*>::size_type i = 0; i != neurons.size(); i++ ) {
+		Neuron* neuron = neurons.at(i);
+		for (int j = 0; j < Ce + Ci; j++) {
+			if (j < Ce) {
+				int target = rand() % 10000;
+				neuron->AddConnexion(&(excitatory.at(target)));
+			}
+			else {
+				int target = rand() % 2500;
+				neuron->AddConnexion(&(inhibitory.at(target)));
+			}
+		}
+	}
+
+	// Initialize poisson distribution
+	default_random_engine generator;
+  poisson_distribution<int> distribution(10.0);
+
+	// Initialize neurons
+	// Neuron neuron2 = Neuron(false, true);
+	// Neuron neuron1 = Neuron(true, true);
 
 	// Initialize connections
-	neuron1.AddConnexion(&neuron2);
-	vector<Neuron*> neurons = {&neuron1, &neuron2};
+	// neuron1.AddConnexion(&neuron2);
+	// vector<Neuron*> neurons = {&neuron1, &neuron2};
 
 	// Options
 	double ext_I = 6.0;
@@ -59,14 +107,18 @@ int main(int argc, char* argv[])
 			if (!neuron->HasCurrent()) {
 				current_I = 0.0;
 			}
-	
-			bool spiked = neuron->Update(sim_time, current_I);
-			cout << neuron->GetMembranePotential() << "\n";
+
+			// Prepare neuron with current and external spikes
+			neuron->SetCurrent(current_I);
+		  double exterior_strength = Je * (double) distribution(generator);
+			neuron->SetExteriorStrength(exterior_strength);
+
+			bool spiked = neuron->Update(1);
 
 			// If neuron spiked, send spike to all connected neurons
 			if (spiked) {
 					for (vector<Neuron*>::size_type j = 0; j != neuron->GetConnexions().size(); j++) {
-						neuron->GetConnexions().at(j)->ReceiveSpike();
+						neuron->GetConnexions().at(j)->ReceiveSpike(neuron->GetClock(), neuron->GetJ());
 					}
 			}
 		}

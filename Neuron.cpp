@@ -4,7 +4,7 @@
 #include <iostream>
 
 // Default constructor sets to 0
-Neuron::Neuron(bool curr) {
+Neuron::Neuron(bool curr, bool exc) {
 	is_refractory = false;
 	has_current = curr;
 	spikes = {};
@@ -12,10 +12,18 @@ Neuron::Neuron(bool curr) {
 	refractory_time = 0.0;
 	ring_ind = 0;
 	membrane_potential = V_RESET;
-	connexions = {};
-	
-	ring_buffer.assign(RING_BUFFER_SIZE, 0);
 
+	is_excitatory = exc;
+	if (is_excitatory) {
+		J = 0.1;
+	}
+	else {
+		J = 0.5;
+	}
+
+	connexions = {};
+
+	ring_buffer.assign(RING_BUFFER_SIZE, 0);
 	c1 = std::exp(-TIME_STEP / TAU);
 	c2 = R * (1 - c1);
 }
@@ -43,29 +51,34 @@ void Neuron::HandleRefractoryPeriod() {
 	membrane_potential = 0.0;
 }
 
-bool Neuron::Update(int sim_time, double input_current) {
-	// Manage refractory period
-	if (is_refractory) {
-		HandleRefractoryPeriod();
-	}
-	else {
-		// Manage if spike detected
-		if (membrane_potential > V_THRESHOLD) {
-			AddSpike(sim_time);
-			// Update ring buffer
-			ring_buffer.at(ring_ind) = 0;
-			ring_ind = (ring_ind + 1) % RING_BUFFER_SIZE;
-			membrane_potential = 0.0;
-			return true;
+bool Neuron::Update(int timesteps) {
+	bool ret = false;
+
+	for (int i = 0; i < timesteps; i++) {
+		// Manage refractory period
+		if (is_refractory) {
+			HandleRefractoryPeriod();
 		}
+		else {
+			// Manage if spike detected
+			if (membrane_potential > V_THRESHOLD) {
+				AddSpike(sim_time);
+				// Update ring buffer
+				ring_buffer.at(ring_ind) = 0;
+				ring_ind = (ring_ind + 1) % RING_BUFFER_SIZE;
+				membrane_potential = 0.0;
+				ret = true;
+			}
+			else {
+				// Solve equation
+				membrane_potential = c1 * membrane_potential + input_current * c2 + ring_buffer.at(ring_ind) + exterior_strength;
 
-		// Solve equation
-		membrane_potential = c1 * membrane_potential + input_current * c2 + J * (double) (ring_buffer.at(ring_ind));
-
-		// Update ring buffer
-		ring_buffer.at(ring_ind) = 0;
-		ring_ind = (ring_ind + 1) % RING_BUFFER_SIZE;
-	std::cout << "ring-ind" << ring_ind << "\n";
+				// Update ring buffer
+				ring_buffer.at(ring_ind) = 0;
+				ring_ind = (ring_ind + 1) % RING_BUFFER_SIZE;
+			}
+		}
+		local_clock++;
 	}
 
 	// Return true iff spike has occurred
@@ -76,11 +89,17 @@ void Neuron::AddConnexion(Neuron* neuron) {
 	connexions.push_back(neuron);
 }
 
-void Neuron::ReceiveSpike() {
-	std::cout << "ring-ind" << ring_ind << "\n";
-	int last_ind = (ring_ind + DELAY) % RING_BUFFER_SIZE;
-	std::cout << last_ind;
-	ring_buffer.at(last_ind) += 1;
+void Neuron::AddConnexion(Neuron* neuron) {
+	connexions.push_back(neuron);
+}
+
+void Neuron::ReceiveSpike(int clock, double strength) {
+	int offset = 0;
+	if (local_clock == clock) {
+		offset = -1;
+	}
+	int last_ind = (ring_ind + DELAY + offset) % RING_BUFFER_SIZE;
+	ring_buffer.at(last_ind) += J;
 }
 
 double Neuron::GetMembranePotential() {
@@ -97,4 +116,20 @@ int Neuron::GetSpikeCount() {
 
 std::vector<double> Neuron::GetSpikes() {
 	return spikes;
+}
+
+void Neuron::SetCurrent(double i) {
+	input_current = i;
+}
+
+double Neuron::GetJ() {
+	return J;
+}
+
+int Neuron::GetClock() {
+	return local_clock;
+}
+
+void Neuron::SetExteriorStrength(double strength) {
+	exterior_strength = strength;
 }

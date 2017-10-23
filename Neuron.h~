@@ -32,6 +32,8 @@ public:
 
 	std::vector<Neuron*> GetConnexions();
 
+	std::vector<Neuron*> GetConnexions();
+
 	bool IsRefractory();
 	bool HasCurrent();
 	void HandleRefractoryPeriod();
@@ -39,9 +41,9 @@ public:
 
 	void AddConnexion(Neuron* neuron);
 
-	void ReceiveSpike(int clock, double strength);
+	void ReceiveSpike();
 
-	void AddSpike();
+	void AddSpike(int sim_time);
 
 	int GetSpikeCount();
 

@@ -1,20 +1,22 @@
-// Include libraries for printing and string manipulation
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <random>
-
-// Include our complex numbers class
 #include "Neuron.h"
 
-static constexpr int Ne = 10000; // Excitatory neurons
-static constexpr int Ni = 2500;  // Inhibitory neurons
-static constexpr int Ce = 1000;
-static constexpr int Ci = 250;
-static constexpr int Cext = 1000; // Exterior (excitatory) neurons
-static constexpr double Je = 0.5; // Exterior (excitatory) neurons
+static constexpr int Ne = 10000; /** Number of excitatory neurons in simulated brain. */
+static constexpr int Ni = 2500; /** Number of inhibitory neurons in simulated brain. */
+static constexpr int Ce = 1000; /** Ne / 10 */
+static constexpr int Ci = 250; /** Ni / 10 */
+static constexpr int Cext = 1000;  /** Number of excitatory neurons in simulated brain. */
+static constexpr double Je = 0.5; /** Potential of spikes from exterior neurons. */
 
+/**
+* Main function
+* Behaviour analog to neural network
+* @param argv[1] simulation length (in timesteps)
+*/
 int main(int argc, char* argv[])
 {
 	// Good practice to use with small scope
@@ -59,35 +61,25 @@ int main(int argc, char* argv[])
 
 	// Initialize poisson distribution
 	default_random_engine generator;
-	poisson_distribution<int> distribution(0.02);
+	poisson_distribution<int> distribution(2);
 
-	// Initialize neurons
-	// Neuron neuron2 = Neuron(false, true);
-	// Neuron neuron1 = Neuron(true, true);
-
-	// Initialize connections
-	// neuron1.AddConnexion(&neuron2);
-	// vector<Neuron*> neurons = {&neuron1, &neuron2};
-
-	// Options
+	// External current (unused)
 	double ext_I = 6.0;
 	int a = 0;
 	int b = 100;
-
-	// Equation variables
 	double current_I = 0.0;
 
 	// Set starting timestep to 0. Multiply by TIME_STEP to get actual time.
 	int sim_time = 0;
 
-	// First command-line argument is duration time in seconds
+	// First command-line argument is simulation length in timesteps
 	int stop_time;
 	sscanf(argv[1], "%d", &stop_time);
 
 	// Loop while sim_time < stop_time
 	while (sim_time < stop_time) {
 
-		// Compute input current
+		// Compute input current (unused)
 		if (sim_time >= a && sim_time < b) {
 			current_I = ext_I;
 		}
@@ -113,6 +105,7 @@ int main(int argc, char* argv[])
 			int curr_clock = neuron->GetClock();
 			double curr_J = neuron->GetJ();
 			
+			// Main update
 			bool spiked = neuron->Update(1);
 			
 			// If neuron spiked, send spike to all connected neurons
@@ -124,20 +117,20 @@ int main(int argc, char* argv[])
 			}
 		}
 
+		// Increment simulation time
 		sim_time++;
 	}
 
 	// Once simulation is over, print to file
-	/*ofstream output1("out1.txt");
-	output1 << "Spikes in Neuron1 occured at times:\n";
-	for (vector<double>::const_iterator i = neuron1.GetSpikes().begin(); i != neuron1.GetSpikes().end(); ++i) {
-		output1 << *i;
+	ofstream output("out.txt");
+	for (vector<Neuron*>::size_type neuron_id = 0; neuron_id != neurons.size(); neuron_id++ )
+		Neuron* neuron = neurons.at(neuron_id);
+		for (vector<double>::const_iterator j = neuron->GetSpikes().begin(); j != neuron->GetSpikes().end(); ++j) {
+			output << neuron_id << "\t" << *j;
+		}
 	}
-	output1 << "\nSpikes in Neuron2 occured at times:\n";
-	for (vector<double>::const_iterator i = neuron2.GetSpikes().begin(); i != neuron2.GetSpikes().end(); ++i) {
-		output1 << *i;
-	}
-	output1.close();*/
+	
+	output.close();
 
     return 0;
 }

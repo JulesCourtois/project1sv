@@ -1,18 +1,12 @@
-// Include header file for Neuron class
 #include "Neuron.h"
 #include <cmath>
 #include <iostream>
 
-// Default constructor sets to 0
 Neuron::Neuron(bool curr, bool exc) {
-	is_refractory = false;
-	has_current = curr;
-	spikes = {};
-	spike_count = 0;
-	refractory_time = 0.0;
-	ring_ind = 0;
-	membrane_potential = V_RESET;
 
+	// Initialize arguments
+	has_current = curr;
+	
 	is_excitatory = exc;
 	if (is_excitatory) {
 		J = 0.1;
@@ -20,10 +14,13 @@ Neuron::Neuron(bool curr, bool exc) {
 	else {
 		J = 0.5;
 	}
-
+	
+	// Initialize vectors
+	spikes = {};
 	connexions = {};
-
 	ring_buffer.assign(RING_BUFFER_SIZE, 0);
+	
+	// Compute constants
 	c1 = std::exp(-TIME_STEP / TAU);
 	c2 = R * (1 - c1);
 }
@@ -37,8 +34,11 @@ bool Neuron::HasCurrent() {
 }
 
 void Neuron::AddSpike() {
+	// Set neuron to refractory mode
 	is_refractory = true;
 	refractory_time = 0.0;
+	
+	// Store new spike
 	++spike_count;
 	spikes.push_back((double) local_clock*TIME_STEP);
 }

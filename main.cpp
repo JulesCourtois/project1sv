@@ -122,7 +122,7 @@ int main(int argc, char* argv[])
 	}
 
 	// Once simulation is over, print to file
-	ofstream output("out.txt");
+	ofstream output("out.csv");
 	for (vector<Neuron*>::size_type neuron_id = 0; neuron_id != neurons.size(); neuron_id++ )
 		Neuron* neuron = neurons.at(neuron_id);
 		for (vector<double>::const_iterator j = neuron->GetSpikes().begin(); j != neuron->GetSpikes().end(); ++j) {

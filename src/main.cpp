@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 	neurons.insert(neurons.end(), inhibitory.begin(), inhibitory.end());
 
 	// Initialize connexions
-	for (vector<Neuron*>::size_type i = 0; i != neurons.size(); i++ ) {
+	for (size_t i = 0; i != neurons.size(); i++ ) {
 		Neuron* neuron = neurons.at(i);
 		for (int j = 0; j < Ce + Ci; j++) {
 			if (j < Ce) {
@@ -89,9 +89,9 @@ int main(int argc, char* argv[])
         }
 
 		// Iterate over all neurons to update
-		for (vector<Neuron*>::size_type i = 0; i != neurons.size(); i++ ) {
+		for (size_t i = 0; i < neurons.size(); i++) {
 
-			Neuron* neuron = neurons.at(i);
+			Neuron* neuron = neurons[i];
 
 			// Update neuron, pass sim_time and current. Only neuron1 has current input
 			if (!neuron->HasCurrent()) {
@@ -110,24 +110,24 @@ int main(int argc, char* argv[])
 			
 			// If neuron spiked, send spike to all connected neurons
 			if (spiked) {
-					for (vector<Neuron*>::size_type j = 0; j != neuron->GetConnexions().size(); j++) {
-						Neuron* connected = neuron->GetConnexions().at(j);
-                        connected->ReceiveSpike(sim_time, curr_J);
+					vector<Neuron*> targets = neuron->GetConnexions();
+					for (size_t j = 0; j < targets.size(); j++) {
+                        targets[j]->ReceiveSpike(sim_time, curr_J);
 					}
 			}
 		}
 
 		// Increment simulation time
 		sim_time++;
-        cout << sim_time << "\n";
 	}
 
 	// Once simulation is over, print to file
 	ofstream output("out.csv");
-    for (vector<Neuron*>::size_type neuron_id = 0; neuron_id != neurons.size(); neuron_id++ ) {
+    for (size_t neuron_id = 0; neuron_id < neurons.size(); neuron_id++) {
 		Neuron* neuron = neurons.at(neuron_id);
-		for (vector<double>::const_iterator j = neuron->GetSpikes().begin(); j != neuron->GetSpikes().end(); ++j) {
-            output << neuron_id << "\t" << *j << "\n";
+		vector<double> spikes = neuron->GetSpikes();
+		for (size_t j = 0; j < spikes.size(); j++) {
+            output << neuron_id << "\t" << spikes[j] << "\n";
 		}
 	}
 	

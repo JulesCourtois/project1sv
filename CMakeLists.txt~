@@ -9,7 +9,7 @@ add_subdirectory(src)
 set(CMAKE_CXX_FLAGS "-W -Wall -pedantic -std=c++11")
 add_executable (neuron src/Neuron.cpp src/main.cpp)
 
-add_executable (neuron_unittest src/Neuron.cpp src/neuron_unittest.cpp)
+add_executable (neuron_unittest Neuron.cpp neuron_unittest.cpp)
 target_link_libraries(neuron_unittest gtest gtest_main)
 
 add_test(neuron_unittest neuron_unittest)

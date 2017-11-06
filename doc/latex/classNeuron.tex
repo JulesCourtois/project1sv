@@ -1,0 +1,190 @@
+\hypertarget{classNeuron}{\section{Neuron Class Reference}
+\label{classNeuron}\index{Neuron@{Neuron}}
+}
+
+
+{\ttfamily \#include $<$Neuron.\-h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classNeuron_a52a92d02ab8290c1b9dc242582b60534}{Neuron} (bool current, bool excitatory)
+\item 
+bool \hyperlink{classNeuron_a900d8743fde5efc8326e496b26cd71c6}{Update} (int timesteps)
+\item 
+void \hyperlink{classNeuron_ab5fb956509b5207949f7b66bc2ba33a3}{Set\-Current} (double i)
+\item 
+void \hyperlink{classNeuron_a2ea3de64d673ef72586dca024ba68c8d}{Set\-Exterior\-Strength} (double strength)
+\item 
+void \hyperlink{classNeuron_aeef13eda9b9a714a0b4bb817d05de59f}{Add\-Connexion} (\hyperlink{classNeuron}{Neuron} $\ast$neuron)
+\item 
+void \hyperlink{classNeuron_aeb372d758da70180013df3505932f8ae}{Receive\-Spike} (int clock, double strength)
+\item 
+std\-::vector$<$ \hyperlink{classNeuron}{Neuron} $\ast$ $>$ \hyperlink{classNeuron_ae345f06a301715aa0a6a43a098353bd4}{Get\-Connexions} ()
+\item 
+int \hyperlink{classNeuron_a8448900068b8bdc4cc940c10dc4e3756}{Get\-Clock} ()
+\item 
+double \hyperlink{classNeuron_aa708f257202e0d7bb3c8d0edb5296226}{Get\-Membrane\-Potential} ()
+\item 
+bool \hyperlink{classNeuron_ac466a54499068e4074c56e604ad01b88}{Is\-Refractory} ()
+\item 
+bool \hyperlink{classNeuron_ab80c0f443f6cab83a0d83bf1295af119}{Has\-Current} ()
+\item 
+int \hyperlink{classNeuron_affc1aaf55cbdc986ad39ce12ee1a79a2}{Get\-Spike\-Count} ()
+\item 
+double \hyperlink{classNeuron_ac1133062bdb6aaac5fe47f83459d4753}{Get\-J} ()
+\item 
+std\-::vector$<$ double $>$ \hyperlink{classNeuron_ae958f1cc23f8a903567db6d934c5c082}{Get\-Spikes} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A class representing a single neuron in a network. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classNeuron_a52a92d02ab8290c1b9dc242582b60534}{\index{Neuron@{Neuron}!Neuron@{Neuron}}
+\index{Neuron@{Neuron}!Neuron@{Neuron}}
+\subsubsection[{Neuron}]{\setlength{\rightskip}{0pt plus 5cm}Neuron\-::\-Neuron (
+\begin{DoxyParamCaption}
+\item[{bool}]{current, }
+\item[{bool}]{excitatory}
+\end{DoxyParamCaption}
+)}}\label{classNeuron_a52a92d02ab8290c1b9dc242582b60534}
+Private helper function to add a spike. A constructor for the \hyperlink{classNeuron}{Neuron}. 
+\begin{DoxyParams}{Parameters}
+{\em current} & a boolean to determine if neuron receives artificial current. \\
+\hline
+{\em excitatory} & a boolean representing the type of the neuron. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See Also}
+is\-\_\-excitatory 
+\end{DoxySeeAlso}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classNeuron_aeef13eda9b9a714a0b4bb817d05de59f}{\index{Neuron@{Neuron}!Add\-Connexion@{Add\-Connexion}}
+\index{Add\-Connexion@{Add\-Connexion}!Neuron@{Neuron}}
+\subsubsection[{Add\-Connexion}]{\setlength{\rightskip}{0pt plus 5cm}void Neuron\-::\-Add\-Connexion (
+\begin{DoxyParamCaption}
+\item[{{\bf Neuron} $\ast$}]{neuron}
+\end{DoxyParamCaption}
+)}}\label{classNeuron_aeef13eda9b9a714a0b4bb817d05de59f}
+Add a connexion to an existing neuron going from this to param. 
+\begin{DoxyParams}{Parameters}
+{\em neuron} & pointer to the receiver neuron. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classNeuron_a8448900068b8bdc4cc940c10dc4e3756}{\index{Neuron@{Neuron}!Get\-Clock@{Get\-Clock}}
+\index{Get\-Clock@{Get\-Clock}!Neuron@{Neuron}}
+\subsubsection[{Get\-Clock}]{\setlength{\rightskip}{0pt plus 5cm}int Neuron\-::\-Get\-Clock (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classNeuron_a8448900068b8bdc4cc940c10dc4e3756}
+Simple getter. \hypertarget{classNeuron_ae345f06a301715aa0a6a43a098353bd4}{\index{Neuron@{Neuron}!Get\-Connexions@{Get\-Connexions}}
+\index{Get\-Connexions@{Get\-Connexions}!Neuron@{Neuron}}
+\subsubsection[{Get\-Connexions}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$ {\bf Neuron} $\ast$ $>$ Neuron\-::\-Get\-Connexions (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classNeuron_ae345f06a301715aa0a6a43a098353bd4}
+Simple getter. \hypertarget{classNeuron_ac1133062bdb6aaac5fe47f83459d4753}{\index{Neuron@{Neuron}!Get\-J@{Get\-J}}
+\index{Get\-J@{Get\-J}!Neuron@{Neuron}}
+\subsubsection[{Get\-J}]{\setlength{\rightskip}{0pt plus 5cm}double Neuron\-::\-Get\-J (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classNeuron_ac1133062bdb6aaac5fe47f83459d4753}
+Simple getter. \hypertarget{classNeuron_aa708f257202e0d7bb3c8d0edb5296226}{\index{Neuron@{Neuron}!Get\-Membrane\-Potential@{Get\-Membrane\-Potential}}
+\index{Get\-Membrane\-Potential@{Get\-Membrane\-Potential}!Neuron@{Neuron}}
+\subsubsection[{Get\-Membrane\-Potential}]{\setlength{\rightskip}{0pt plus 5cm}double Neuron\-::\-Get\-Membrane\-Potential (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classNeuron_aa708f257202e0d7bb3c8d0edb5296226}
+Simple getter. \hypertarget{classNeuron_affc1aaf55cbdc986ad39ce12ee1a79a2}{\index{Neuron@{Neuron}!Get\-Spike\-Count@{Get\-Spike\-Count}}
+\index{Get\-Spike\-Count@{Get\-Spike\-Count}!Neuron@{Neuron}}
+\subsubsection[{Get\-Spike\-Count}]{\setlength{\rightskip}{0pt plus 5cm}int Neuron\-::\-Get\-Spike\-Count (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classNeuron_affc1aaf55cbdc986ad39ce12ee1a79a2}
+Simple getter. \hypertarget{classNeuron_ae958f1cc23f8a903567db6d934c5c082}{\index{Neuron@{Neuron}!Get\-Spikes@{Get\-Spikes}}
+\index{Get\-Spikes@{Get\-Spikes}!Neuron@{Neuron}}
+\subsubsection[{Get\-Spikes}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$ double $>$ Neuron\-::\-Get\-Spikes (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classNeuron_ae958f1cc23f8a903567db6d934c5c082}
+Simple getter. \hypertarget{classNeuron_ab80c0f443f6cab83a0d83bf1295af119}{\index{Neuron@{Neuron}!Has\-Current@{Has\-Current}}
+\index{Has\-Current@{Has\-Current}!Neuron@{Neuron}}
+\subsubsection[{Has\-Current}]{\setlength{\rightskip}{0pt plus 5cm}bool Neuron\-::\-Has\-Current (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classNeuron_ab80c0f443f6cab83a0d83bf1295af119}
+Simple getter. \hypertarget{classNeuron_ac466a54499068e4074c56e604ad01b88}{\index{Neuron@{Neuron}!Is\-Refractory@{Is\-Refractory}}
+\index{Is\-Refractory@{Is\-Refractory}!Neuron@{Neuron}}
+\subsubsection[{Is\-Refractory}]{\setlength{\rightskip}{0pt plus 5cm}bool Neuron\-::\-Is\-Refractory (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{classNeuron_ac466a54499068e4074c56e604ad01b88}
+Simple getter. \hypertarget{classNeuron_aeb372d758da70180013df3505932f8ae}{\index{Neuron@{Neuron}!Receive\-Spike@{Receive\-Spike}}
+\index{Receive\-Spike@{Receive\-Spike}!Neuron@{Neuron}}
+\subsubsection[{Receive\-Spike}]{\setlength{\rightskip}{0pt plus 5cm}void Neuron\-::\-Receive\-Spike (
+\begin{DoxyParamCaption}
+\item[{int}]{clock, }
+\item[{double}]{strength}
+\end{DoxyParamCaption}
+)}}\label{classNeuron_aeb372d758da70180013df3505932f8ae}
+Used to receive a spike. 
+\begin{DoxyParams}{Parameters}
+{\em clock} & the time the spike was sent. \\
+\hline
+{\em strength} & the potential sent by the spike. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classNeuron_ab5fb956509b5207949f7b66bc2ba33a3}{\index{Neuron@{Neuron}!Set\-Current@{Set\-Current}}
+\index{Set\-Current@{Set\-Current}!Neuron@{Neuron}}
+\subsubsection[{Set\-Current}]{\setlength{\rightskip}{0pt plus 5cm}void Neuron\-::\-Set\-Current (
+\begin{DoxyParamCaption}
+\item[{double}]{i}
+\end{DoxyParamCaption}
+)}}\label{classNeuron_ab5fb956509b5207949f7b66bc2ba33a3}
+Simple setter for the exterior current. 
+\begin{DoxyParams}{Parameters}
+{\em i} & exterior current. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classNeuron_a2ea3de64d673ef72586dca024ba68c8d}{\index{Neuron@{Neuron}!Set\-Exterior\-Strength@{Set\-Exterior\-Strength}}
+\index{Set\-Exterior\-Strength@{Set\-Exterior\-Strength}!Neuron@{Neuron}}
+\subsubsection[{Set\-Exterior\-Strength}]{\setlength{\rightskip}{0pt plus 5cm}void Neuron\-::\-Set\-Exterior\-Strength (
+\begin{DoxyParamCaption}
+\item[{double}]{strength}
+\end{DoxyParamCaption}
+)}}\label{classNeuron_a2ea3de64d673ef72586dca024ba68c8d}
+Simple setter for the extrapolated potential from the rest of the brain. 
+\begin{DoxyParams}{Parameters}
+{\em strength} & extrapolated exterior potential. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classNeuron_a900d8743fde5efc8326e496b26cd71c6}{\index{Neuron@{Neuron}!Update@{Update}}
+\index{Update@{Update}!Neuron@{Neuron}}
+\subsubsection[{Update}]{\setlength{\rightskip}{0pt plus 5cm}bool Neuron\-::\-Update (
+\begin{DoxyParamCaption}
+\item[{int}]{timesteps}
+\end{DoxyParamCaption}
+)}}\label{classNeuron_a900d8743fde5efc8326e496b26cd71c6}
+The most important function, update the neuron. 
+\begin{DoxyParams}{Parameters}
+{\em timesteps} & the number of timesteps to update for. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+Neuron.\-h\item 
+Neuron.\-cpp\end{DoxyCompactItemize}

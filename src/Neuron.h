@@ -14,7 +14,7 @@ private:
 	static constexpr double V_RESET = 0.0; /** Reset value in milliVolts. */
 	static constexpr double C = 1.0; /** Capacity */
 	static constexpr double R = 20.0; /** Resistance */
-	static constexpr int DELAY = /** Delay for a spike to be received by another neuron. */
+	static constexpr int DELAY = 15; /** Delay for a spike to be received by another neuron. */
 	static constexpr int RING_BUFFER_SIZE = 16; /** Delay + 1 */
 	static constexpr double TIME_STEP = 0.1; /** Value of a time step in milliseconds. */
 
@@ -87,6 +87,7 @@ public:
 	*/
 	void ReceiveSpike(int clock, double strength);
 
+    /** Simple getter. */
 	std::vector<Neuron*> GetConnexions(); /** Simple getter. */
 	int GetClock(); /** Simple getter. */
 	double GetMembranePotential(); /** Simple getter. */
@@ -94,6 +95,6 @@ public:
 	bool HasCurrent(); /** Simple getter. */
 	int GetSpikeCount(); /** Simple getter. */
 	double GetJ(); /** Simple getter. */
-	std::vector<double> GetSpikes(); /** Simple getter. */
+    std::vector<double> GetSpikes();
 
 };

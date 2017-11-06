@@ -82,7 +82,7 @@ bool Neuron::Update(int timesteps) {
 	}
 
 	// Return true iff spike has occurred
-	return false;
+    return ret;
 }
 
 void Neuron::AddConnexion(Neuron* neuron) {

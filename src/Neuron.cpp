@@ -1,4 +1,5 @@
 #include "Neuron.h"
+#include <assert.h>
 #include <iostream>
 
 Neuron::Neuron(bool curr, bool exc) {
@@ -47,6 +48,8 @@ void Neuron::HandleRefractoryPeriod() {
 }
 
 bool Neuron::Update(int timesteps) {
+    assert(timesteps > 0);
+
 	bool ret = false;
 
 	for (int i = 0; i < timesteps; i++) {
@@ -81,10 +84,14 @@ bool Neuron::Update(int timesteps) {
 }
 
 void Neuron::AddConnexion(Neuron* neuron) {
+    assert(neuron != NULL);
 	connexions.push_back(neuron);
 }
 
 void Neuron::ReceiveSpike(int clock, double strength) {
+    assert(clock > 0);
+    assert(strength > 0);
+
 	int offset = 0;
 	if (local_clock == clock) {
 		offset = -1;

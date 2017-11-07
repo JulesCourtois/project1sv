@@ -25,6 +25,11 @@ int main(int argc, char* argv[])
 	// Good practice to use with small scope
     using namespace std;
 
+    // First command-line argument is simulation length in timesteps
+    int stop_time;
+    sscanf(argv[1], "%d", &stop_time);
+    assert(stop_time > 0);
+
     cout << "Creating network...\n";
 
 	// Initialize network
@@ -75,10 +80,6 @@ int main(int argc, char* argv[])
 	// Set starting timestep to 0. Multiply by TIME_STEP to get actual time.
 	int sim_time = 0;
 
-	// First command-line argument is simulation length in timesteps
-	int stop_time;
-	sscanf(argv[1], "%d", &stop_time);
-
     cout << "Simulating network...\n";
 
 	// Loop while sim_time < stop_time
@@ -125,7 +126,7 @@ int main(int argc, char* argv[])
     cout << "Printing to file...\n";
 
 	// Once simulation is over, print to file
-	ofstream output("out.csv");
+    ofstream output("out.csv");
     for (size_t neuron_id = 0; neuron_id < neurons.size(); neuron_id++) {
 		Neuron* neuron = neurons.at(neuron_id);
 		vector<int> spikes = neuron->GetSpikes();
@@ -134,6 +135,7 @@ int main(int argc, char* argv[])
 		}
 	}
 	
+    // Close output file
 	output.close();
 
     return 0;

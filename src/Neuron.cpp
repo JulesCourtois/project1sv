@@ -6,7 +6,7 @@ Neuron::Neuron(bool curr, bool exc) {
 
 	// Initialize arguments
 	has_current = curr;
-	
+
 	is_excitatory = exc;
 	if (is_excitatory) {
 		J = 0.1;
@@ -14,11 +14,11 @@ Neuron::Neuron(bool curr, bool exc) {
 	else {
 		J = 0.5;
 	}
-	
+
 	// Initialize vectors
 	spikes = {};
 	connexions = {};
-    ring_buffer.assign(RING_BUFFER_SIZE, 0);
+	ring_buffer.assign(RING_BUFFER_SIZE, 0);
 }
 
 std::vector<Neuron*> Neuron::GetConnexions() {
@@ -33,7 +33,7 @@ void Neuron::AddSpike() {
 	// Set neuron to refractory mode
 	is_refractory = true;
 	refractory_time = 0.0;
-	
+
 	// Store new spike
 	++spike_count;
 	spikes.push_back(local_clock);
@@ -48,7 +48,7 @@ void Neuron::HandleRefractoryPeriod() {
 }
 
 bool Neuron::Update(int timesteps) {
-    assert(timesteps > 0);
+	assert(timesteps > 0);
 
 	bool ret = false;
 
@@ -68,7 +68,7 @@ bool Neuron::Update(int timesteps) {
 				ret = true;
 			}
 			else {
-                // Solve equation
+				// Solve equation
 				membrane_potential = c1 * membrane_potential + input_current * c2 + ring_buffer.at(ring_ind) + exterior_strength;
 
 				// Update ring buffer
@@ -80,17 +80,17 @@ bool Neuron::Update(int timesteps) {
 	}
 
 	// Return true iff spike has occurred
-    return ret;
+	return ret;
 }
 
 void Neuron::AddConnexion(Neuron* neuron) {
-    assert(neuron != NULL);
+	assert(neuron != NULL);
 	connexions.push_back(neuron);
 }
 
 void Neuron::ReceiveSpike(int clock, double strength) {
-    assert(clock > 0);
-    assert(strength > 0);
+	assert(clock > 0);
+	assert(strength > 0);
 
 	int offset = 0;
 	if (local_clock == clock) {

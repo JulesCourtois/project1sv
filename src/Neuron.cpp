@@ -66,7 +66,6 @@ bool Neuron::Update(int timesteps) {
 			}
 			else {
                 // Solve equation
-                std::cout << exterior_strength << "\n";
 				membrane_potential = c1 * membrane_potential + input_current * c2 + ring_buffer.at(ring_ind) + exterior_strength;
 
 				// Update ring buffer

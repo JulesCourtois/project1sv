@@ -1,4 +1,5 @@
 #include <vector>
+#include <cmath>
 
 /**
  * A class representing a single neuron in a network.
@@ -21,7 +22,7 @@ private:
 	// declare neuron-specific constants
 	bool is_excitatory; /** Neuron type, true for excitatory and false for inhibitory. */
 	double J; /** In milliVolts, 0.1 for excitatory, 0.5 for inhibitory. */
-	double c1, c2; /** Constants for decay modellization. */
+    double c1 = std::exp(-TIME_STEP/TAU), c2 = R * (1 - c1); /** Constants for decay modellization. */
 	
 	// declare unused current variables
 	bool has_current; /** Does this neuron receive exterior current ? */
@@ -39,7 +40,7 @@ private:
 	double exterior_strength = 0.0; /** Store the extrapolated potential coming from non-simulated parts of the brain. */
 	std::vector<double> ring_buffer; /** Used to store received spikes from other simulated neurons. */
 	int ring_ind = 0; /** Index for the ring_buffer. */
-	std::vector<double> spikes; /** Times of each spike the neuron has experienced. */
+	std::vector<int> spikes; /** Times of each spike the neuron has experienced. */
 	std::vector<Neuron*> connexions; /** Each neuron that should be sent a signal when this one spikes. */
 	
 	int local_clock = 0; /** Store the time the neuron has been simulated up to. */
@@ -95,6 +96,6 @@ public:
 	bool HasCurrent(); /** Simple getter. */
 	int GetSpikeCount(); /** Simple getter. */
 	double GetJ(); /** Simple getter. */
-    std::vector<double> GetSpikes();
+    	std::vector<int> GetSpikes();
 
 };

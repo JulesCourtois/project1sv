@@ -1,5 +1,4 @@
 #include "Neuron.h"
-#include <cmath>
 #include <iostream>
 
 Neuron::Neuron(bool curr, bool exc) {
@@ -18,11 +17,7 @@ Neuron::Neuron(bool curr, bool exc) {
 	// Initialize vectors
 	spikes = {};
 	connexions = {};
-	ring_buffer.assign(RING_BUFFER_SIZE, 0);
-	
-	// Compute constants
-	c1 = std::exp(-TIME_STEP / TAU);
-	c2 = R * (1 - c1);
+    ring_buffer.assign(RING_BUFFER_SIZE, 0);
 }
 
 std::vector<Neuron*> Neuron::GetConnexions() {
@@ -40,7 +35,7 @@ void Neuron::AddSpike() {
 	
 	// Store new spike
 	++spike_count;
-	spikes.push_back((double) local_clock*TIME_STEP);
+	spikes.push_back(local_clock);
 }
 
 void Neuron::HandleRefractoryPeriod() {
@@ -70,7 +65,8 @@ bool Neuron::Update(int timesteps) {
 				ret = true;
 			}
 			else {
-				// Solve equation
+                // Solve equation
+                std::cout << exterior_strength << "\n";
 				membrane_potential = c1 * membrane_potential + input_current * c2 + ring_buffer.at(ring_ind) + exterior_strength;
 
 				// Update ring buffer
@@ -110,7 +106,7 @@ int Neuron::GetSpikeCount() {
 	return spike_count;
 }
 
-std::vector<double> Neuron::GetSpikes() {
+std::vector<int> Neuron::GetSpikes() {
 	return spikes;
 }
 

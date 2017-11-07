@@ -11,7 +11,7 @@ static constexpr int Ni = 2500; /** Number of inhibitory neurons in simulated br
 static constexpr int Ce = 1000; /** Ne / 10 */
 static constexpr int Ci = 250; /** Ni / 10 */
 static constexpr int Cext = 1000;  /** Number of excitatory neurons in simulated brain. */
-static constexpr double Je = 0.5; /** Potential of spikes from exterior neurons. */
+static constexpr double Je = 0.1; /** Potential of spikes from exterior neurons. */
 
 /**
 * Main function
@@ -24,6 +24,8 @@ int main(int argc, char* argv[])
 
 	// Good practice to use with small scope
     using namespace std;
+
+    cout << "Creating network...\n";
 
 	// Initialize network
 	vector<Neuron*> excitatory;
@@ -77,6 +79,8 @@ int main(int argc, char* argv[])
 	int stop_time;
 	sscanf(argv[1], "%d", &stop_time);
 
+    cout << "Simulating network...\n";
+
 	// Loop while sim_time < stop_time
 	while (sim_time < stop_time) {
 
@@ -100,19 +104,16 @@ int main(int argc, char* argv[])
 
 			// Prepare neuron with current and external spikes
 			neuron->SetCurrent(current_I);
-			double exterior_strength = Je * (double) distribution(generator);
+            double exterior_strength = Je * (double) distribution(generator);
 			neuron->SetExteriorStrength(exterior_strength);
 
 			double curr_J = neuron->GetJ();
 			
-			// Main update
-			bool spiked = neuron->Update(1);
-			
-			// If neuron spiked, send spike to all connected neurons
-			if (spiked) {
+            // Update. If neuron spiked, send spike to all connected neurons
+            if (neuron->Update(1)) {
 					vector<Neuron*> targets = neuron->GetConnexions();
 					for (size_t j = 0; j < targets.size(); j++) {
-                        targets[j]->ReceiveSpike(sim_time, curr_J);
+                        			targets[j]->ReceiveSpike(sim_time, curr_J);
 					}
 			}
 		}
@@ -121,11 +122,13 @@ int main(int argc, char* argv[])
 		sim_time++;
 	}
 
+    cout << "Printing to file...\n";
+
 	// Once simulation is over, print to file
 	ofstream output("out.csv");
     for (size_t neuron_id = 0; neuron_id < neurons.size(); neuron_id++) {
 		Neuron* neuron = neurons.at(neuron_id);
-		vector<double> spikes = neuron->GetSpikes();
+		vector<int> spikes = neuron->GetSpikes();
 		for (size_t j = 0; j < spikes.size(); j++) {
             output << neuron_id << "\t" << spikes[j] << "\n";
 		}
